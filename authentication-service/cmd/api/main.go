@@ -37,19 +37,22 @@ func main() {
 		DB:     conn,
 		Models: data.New(conn),
 	}
-
+	//setting up server and handler
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
 	}
-
+	//listen and serve on port 70
+	//serving app.routes
 	err := srv.ListenAndServe()
 	if err != nil {
 		log.Panic(err)
 	}
 }
 
+//opening the DB
 func openDB(dsn string) (*sql.DB, error) {
+	//driver name //data source name (dsn)
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
@@ -63,9 +66,12 @@ func openDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
+//connecting to the opened db
 func connectToDB() *sql.DB {
+	//geting environment variables to access the db from the dsn
 	dsn := os.Getenv("DSN")
 
+	//looping over the connection until connection is made
 	for {
 		connection, err := openDB(dsn)
 		if err != nil {
@@ -75,6 +81,7 @@ func connectToDB() *sql.DB {
 			log.Println("Connected to Postgres")
 			return connection
 		}
+		//if not 10 counts log err and return out
 		if counts > 10 {
 			log.Println(err)
 			return nil
