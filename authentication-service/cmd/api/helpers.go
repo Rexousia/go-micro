@@ -14,12 +14,16 @@ type jsonResponse struct {
 }
 
 func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) error {
+	//setting a limit
 	maxBytes := 1048576 // one megabyte
 
 	//Request Body
 	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
 
+	//coverting the request body of type *http.Request to a value of type Decoder
 	dec := json.NewDecoder(r.Body)
+
+	//decoding the data being passed through the request
 	err := dec.Decode(data)
 	if err != nil {
 		return err
