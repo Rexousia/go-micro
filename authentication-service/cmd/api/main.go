@@ -15,7 +15,7 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
-const webPort = "70"
+const webPort = "80"
 
 var counts int64
 
@@ -42,7 +42,7 @@ func main() {
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
 	}
-	//listen and serve on port 70
+	//listen and serve on port 80
 	//serving app.routes
 	err := srv.ListenAndServe()
 	if err != nil {
